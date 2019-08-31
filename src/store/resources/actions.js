@@ -1,18 +1,22 @@
 import * as swapiService from "services/swapi"
+import { resourcesSelectors } from "store/resources"
 
 export const FETCH_RESOURCE_REQUEST = "FETCH_RESOURCE_REQUEST"
 export const FETCH_RESOURCE_SUCCESS = "FETCH_RESOURCE_SUCCESS"
 export const FETCH_RESOURCE_FAILURE = "FETCH_RESOURCE_FAILURE"
 
 export function getResource (name, id) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({
       type: FETCH_RESOURCE_REQUEST,
       name
     })
-    let response
     try {
-      response = await swapiService.getResource(name, id)
+      let response = resourcesSelectors.getResource(getState(), name, id)
+      if (!response) {
+        response = await swapiService.getResource(name, id)
+          .then(res => serializeResource(res))
+      }
       dispatch({
         type: FETCH_RESOURCE_SUCCESS,
         name,
@@ -33,13 +37,28 @@ export const FETCH_RESOURCES_BY_NAME_SUCCESS = "FETCH_RESOURCES_BY_NAME_SUCCESS"
 export const FETCH_RESOURCES_BY_NAME_FAILURE = "FETCH_RESOURCES_BY_NAME_FAILURE"
 
 export function getResourcesByName (name, params = {}) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const page = params.page || 1
+
     dispatch({
       type: FETCH_RESOURCES_BY_NAME_REQUEST,
       name
     })
     try {
-      const response = await swapiService.getResourcesByName(name, params)
+      const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name) || {}
+      let response
+      if(resourcesMeta.page === page) {
+        response = {
+          results: resourcesSelectors.getResources(getState(), name),
+          ...resourcesMeta
+        }
+      }
+      if(!response) {
+        response = await swapiService.getResourcesByName(name, params)
+          .then(res => ({...res, results: res.results.map(el => serializeResource(el))}))
+      }
+      
+      console.log(response)
       dispatch({
         type: FETCH_RESOURCES_BY_NAME_SUCCESS,
         name,
@@ -76,5 +95,12 @@ export function getResourcesMap () {
         payload: error
       })
     }
+  }
+}
+
+function serializeResource (resource) {
+  return {
+    ...resource,
+    id: resource.url.split("/").reverse()[1]
   }
 }

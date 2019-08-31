@@ -12,23 +12,15 @@ import {
   FETCH_RESOURCE_SUCCESS
 } from "store/resources/actions"
 
-function serializeResource (resource) {
-  return {
-    ...resource,
-    id: resource.url.split("/").reverse()[1]
-  }
-}
-
 function resource (state, action) {
   console.log(action.type)
-  console.log(action.name)
+  console.log("action.name: ", action.name)
   switch (action.type) {
     case FETCH_RESOURCE_REQUEST:
       return {...state, isFetching: true, error: null}
     case FETCH_RESOURCE_SUCCESS:
       const resources = {...state[action.name]}
-      const serialized = serializeResource(action.payload)
-      resources.data[serialized.id] = serialized
+      resources.data[action.payload.id] = action.payload
       return {...state, isFetching: false, [action.name]: resources}
     case FETCH_RESOURCE_FAILURE:
       return {...state, isFetching: false, error: action.payload}
@@ -42,12 +34,13 @@ function resources (state, action) {
     case FETCH_RESOURCES_BY_NAME_REQUEST:
       return {...state, isFetching: true, error: null}
     case FETCH_RESOURCES_BY_NAME_SUCCESS:
+      const newData = (state[action.name] && state[action.name].data) || {}
       const resources = {
         count: action.payload.count,
         page: action.payload.page || state[action.name.page] || 1,
-        data: {...((state[action.name] && state[action.name].data) || {})}
+        data: {...newData}
       }
-      action.payload.results.map(el => serializeResource(el)).forEach(el => {
+      action.payload.results.forEach(el => {
         resources.data[el.id] = el
       })
       return {...state, isFetching: false, [action.name]: resources}
