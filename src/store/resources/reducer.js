@@ -17,13 +17,24 @@ function resource (state, action) {
   console.log("action.name: ", action.name)
   switch (action.type) {
     case FETCH_RESOURCE_REQUEST:
-      return {...state, isFetching: true, error: null}
+      return {...state, error: null}
     case FETCH_RESOURCE_SUCCESS:
-      const resources = {...state[action.name]}
+      let resources
+      if(state[action.name]) {
+        resources = {
+          ...state[action.name]
+        }
+      } else {
+        resources = {
+          count: 0,
+          page: null,
+          data: {}
+        }
+      }
       resources.data[action.payload.id] = action.payload
-      return {...state, isFetching: false, [action.name]: resources}
+      return {...state, [action.name]: resources}
     case FETCH_RESOURCE_FAILURE:
-      return {...state, isFetching: false, error: action.payload}
+      return {...state, error: action.payload}
     default:
       return state
   }
@@ -32,20 +43,20 @@ function resource (state, action) {
 function resources (state, action) {
   switch (action.type) {
     case FETCH_RESOURCES_BY_NAME_REQUEST:
-      return {...state, isFetching: true, error: null}
+      return {...state, error: null}
     case FETCH_RESOURCES_BY_NAME_SUCCESS:
-      const newData = (state[action.name] && state[action.name].data) || {}
+      const resourceData = (state[action.name] && state[action.name].data) || {}
       const resources = {
         count: action.payload.count,
         page: action.payload.page || state[action.name.page] || 1,
-        data: {...newData}
+        data: {...resourceData}
       }
       action.payload.results.forEach(el => {
         resources.data[el.id] = el
       })
-      return {...state, isFetching: false, [action.name]: resources}
+      return {...state, [action.name]: resources}
     case FETCH_RESOURCES_BY_NAME_FAILURE:
-      return {...state, isFetching: false, error: action.payload}
+      return {...state, error: action.payload}
     default:
       return state
   }
@@ -54,19 +65,11 @@ function resources (state, action) {
 function resourcesMap (state, action) {
   switch (action.type) {
     case FETCH_RESOURCES_MAP_REQUEST:
-      return {...state, isFetching: true, error: null}
+      return {...state, error: null}
     case FETCH_RESOURCES_MAP_SUCCESS:
-      const resourcesByKey = {}
-      Object.keys(action.payload).forEach(el => {
-        resourcesByKey[el] = state[el] || {
-          count: 0,
-          page: null,
-          data: {}
-        }
-      })
-      return {...state, isFetching: false, resourcesMap: action.payload, ...resourcesByKey}
+      return {...state, resourcesMap: action.payload}
     case FETCH_RESOURCES_MAP_FAILURE:
-      return {...state, isFetching: false, error: state.payload}
+      return {...state, error: state.payload}
     default:
       return state
   }
@@ -74,6 +77,5 @@ function resourcesMap (state, action) {
 
 export default reduceReducers({
   resourcesMap: {},
-  isFetching: false,
   error: null
 }, resourcesMap, resources, resource)

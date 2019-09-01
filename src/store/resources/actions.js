@@ -57,8 +57,6 @@ export function getResourcesByName (name, params = {}) {
         response = await swapiService.getResourcesByName(name, params)
           .then(res => ({...res, results: res.results.map(el => serializeResource(el))}))
       }
-      
-      console.log(response)
       dispatch({
         type: FETCH_RESOURCES_BY_NAME_SUCCESS,
         name,
