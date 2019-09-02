@@ -4,8 +4,6 @@ import { withRouter } from "react-router-dom"
 import { resourcesSelectors, resourcesActions } from "store/resources"
 import ShowItem from "components/ShowItem"
 
-let i = 0
-
 class ResourceItem extends Component {
   constructor (props) {
     super(props)
@@ -25,49 +23,49 @@ class ResourceItem extends Component {
     
     const data = this.props.data
     const resolvedData = this.state.resolvedData
-    if (!data || (!!resolvedData && resolvedData.id === data.id)) return
+    const isRouteChanged = this.props.match.url !== prevProps.match.url
+    if(isRouteChanged) this.setState({resolvedData: null})
+    if (!data || resolvedData) return
 
     this.setState({isFetching: true})
     
     const newResolvedData = {...data}
     const promiseArray = []
-    const relatedOptions = {}
+    const relatedProps = {}
 
     const parseUrl = url => {
-      const urlArray = url.split("/").reverse()
-      const name = urlArray[2]
-      const id = urlArray[1]
+      const [, id, name] = url.split("/").reverse()
       return {name, id}
     }
 
     Object.keys(newResolvedData).forEach(key => {
       if (newResolvedData[key] instanceof Array) {
-        relatedOptions[key] = []
+        relatedProps[key] = []
         newResolvedData[key].forEach(el => {
           const {name, id} = parseUrl(el)
           promiseArray.push(this.props.getResourceItem(name, id))
-          relatedOptions[key].push({name, id})
+          relatedProps[key].push({name, id})
         })
       }
       if (typeof newResolvedData[key] === "string" && key !== "url") {
         if (newResolvedData[key].includes("https://swapi.co/api/")) {
           const {name, id} = parseUrl(newResolvedData[key])
           promiseArray.push(this.props.getResourceItem(name, id))
-          relatedOptions[key] = {name, id}
+          relatedProps[key] = {name, id}
         }
       }
     })
     try {
       await Promise.all(promiseArray)
-      Object.keys(relatedOptions).forEach(key => {
-        if (relatedOptions[key] instanceof Array) {
-          newResolvedData[key] = relatedOptions[key].map(el => this.props.getResourceSelector(el.name, el.id))
+      Object.keys(relatedProps).forEach(key => {
+        if (relatedProps[key] instanceof Array) {
+          newResolvedData[key] = relatedProps[key].map(el => this.props.getResourceSelector(el.name, el.id))
         } else {
-          newResolvedData[key] = this.props.getResourceSelector(relatedOptions[key].name, relatedOptions[key].id)
+          newResolvedData[key] = this.props.getResourceSelector(relatedProps[key].name, relatedProps[key].id)
         }
       })
 
-      newResolvedData.relatedOptions = Object.keys(relatedOptions)
+      newResolvedData.relatedProps = Object.keys(relatedProps)
       this.setState({resolvedData: newResolvedData})
     } catch (e) {
       console.log("resolve failure")

@@ -8,7 +8,7 @@ class ShowItem extends Component {
   }
 
   renderArray (array) {
-    if(!array.length) return "Not have"
+    if (!array.length) return "Not have"
     return array.map(el => {
       return <div key={el.id}>{this.renderLinkItem(el)}</div>
     })
@@ -23,22 +23,24 @@ class ShowItem extends Component {
 
   render () {
     const {data} = this.props
+    const privateFields = ["id", "created", "edited", "relatedProps", "url"]
     return (
       <div>
-        {Object.keys(data).map(el => {
-          return (
-            <div key={el} style={{display: "flex", border: "1px solid gray", width: "450px"}}>
-              <div style={{width: "120px", textAlign: "left"}}>{`${el}:`}</div>
-              <div style={{display: "flex",flexDirection: "column", marginLeft: "10px"}}>
-                {
-                  data.relatedOptions.includes(el) ?
-                    this.renderRelation(data[el]) :
-                    `${data[el]}`
-                }
+        {Object.keys(data).filter(key => !privateFields.includes(key))
+          .map(el => {
+            return (
+              <div key={el} style={{display: "flex", border: "1px solid gray", width: "450px"}}>
+                <div style={{width: "120px", textAlign: "left"}}>{`${el}:`}</div>
+                <div style={{display: "flex", flexDirection: "column", marginLeft: "10px"}}>
+                  {
+                    data.relatedProps.includes(el) ?
+                      this.renderRelation(data[el]) :
+                      `${data[el]}`
+                  }
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
       </div>
     )
   }
