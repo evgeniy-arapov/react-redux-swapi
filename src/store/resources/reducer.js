@@ -60,7 +60,8 @@ function resources (state, action) {
           ...resources
         }
       }
-      if(!(resources.pageData[page] && resources.pageData[page].length)) {
+      if(!(resources.pageData && resources.pageData[page] && resources.pageData[page].length)) {
+        if(!resources.pageData) resources.pageData = {}
         resources.pageData[page] = []
         action.payload.results.forEach(el => {
           resources.data[el.id] = el

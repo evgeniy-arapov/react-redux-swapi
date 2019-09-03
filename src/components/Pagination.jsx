@@ -7,6 +7,7 @@ export default class Pagination extends React.Component {
     const {meta} = this.props
     const nextPage = meta.page + 1 > meta.lastPage ? null : meta.page + 1
     const prevPage = meta.page - 1 > 0 ? meta.page - 1 : null
+    console.log(meta)
     if(!Object.keys(meta).length) return null
     return (
       <div className="pagination">

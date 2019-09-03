@@ -14,7 +14,6 @@ class ResourceItem extends Component {
   }
 
   componentDidMount () {
-    console.log("componentDidMount")
     this.props.getResourceItem(this.props.match.params.resourceName, this.props.match.params.itemId)
   }
 
@@ -76,7 +75,6 @@ class ResourceItem extends Component {
   }
 
   render () {
-    console.log("1", this.state.resolvedData)
     return (
       <div>
         {

@@ -9,13 +9,13 @@ export function getResources (state, name) {
 
 export function getPageResources (state, name, page) {
   const resources = state.resources[name]
-  const resourcesPage = (resources && resources.pageData[page || resources.page]) || []
+  const resourcesPage = (resources && resources.pageData && resources.pageData[page || resources.page]) || []
   return resourcesPage.map(el => resources.data[el])
 }
 
 export function getResourcesMeta (state, name) {
   const resources = state.resources[name]
-  if(resources) {
+  if(resources && resources.pageData) {
     const page = +resources.page
     const count = +resources.count
     const perPage = 10
