@@ -7,14 +7,28 @@ export function getResources (state, name) {
   return Object.keys(resources).map(el => resources[el])
 }
 
-export function getPageResources (state, name) {
-  const resources = (state.resources[name] && state.resources[name].data) || {}
-  const resourcesPage = (state.resources[name] && state.resources[name].pageData) || []
-  return resourcesPage.map(el => resources[el])
+export function getPageResources (state, name, page) {
+  const resources = state.resources[name]
+  const resourcesPage = (resources && resources.pageData[page || resources.page]) || []
+  return resourcesPage.map(el => resources.data[el])
 }
 
 export function getResourcesMeta (state, name) {
-  return state.resources[name] && {page: state.resources[name].page, count: state.resources[name].count}
+  const resources = state.resources[name]
+  if(resources) {
+    const page = +resources.page
+    const count = +resources.count
+    const perPage = 10
+    const lastPage = Math.ceil(count / perPage)
+
+    return {
+      page,
+      count,
+      perPage,
+      lastPage
+    }
+  }
+  return {}
 }
 
 export function getResource (state, name, id) {

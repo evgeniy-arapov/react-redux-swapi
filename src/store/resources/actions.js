@@ -42,30 +42,36 @@ export function getResourcesByName (name, params = {}) {
 
     dispatch({
       type: FETCH_RESOURCES_BY_NAME_REQUEST,
-      name
+      name,
+      page
     })
     try {
-      const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name) || {}
+      const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name)
       let response
-      if(resourcesMeta.page === page) {
-        response = {
-          results: resourcesSelectors.getPageResources(getState(), name),
-          ...resourcesMeta
+      if (resourcesMeta.count) {
+        const pageResources = resourcesSelectors.getPageResources(getState(), name, page)
+        if(pageResources.length) {
+          response = {
+            results: pageResources,
+            ...resourcesMeta
+          }
         }
       }
-      if(!response) {
+      if (!response) {
         response = await swapiService.getResourcesByName(name, params)
           .then(res => ({...res, results: res.results.map(el => serializeResource(el))}))
       }
       dispatch({
         type: FETCH_RESOURCES_BY_NAME_SUCCESS,
         name,
+        page,
         payload: response
       })
     } catch (error) {
       dispatch({
         type: FETCH_RESOURCES_BY_NAME_FAILURE,
         name,
+        page,
         payload: error
       })
     }

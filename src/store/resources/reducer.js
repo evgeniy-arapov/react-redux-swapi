@@ -43,17 +43,30 @@ function resources (state, action) {
     case FETCH_RESOURCES_BY_NAME_REQUEST:
       return {...state, error: null}
     case FETCH_RESOURCES_BY_NAME_SUCCESS:
-      const resourceData = (state[action.name] && state[action.name].data) || {}
-      const resources = {
+      const page = action.page || 1
+      let resources = {
         count: action.payload.count,
-        page: state[action.name.page] || 1,
-        data: {...resourceData},
-        pageData: []
+        page,
       }
-      action.payload.results.forEach(el => {
-        resources.data[el.id] = el
-        resources.pageData.push(el.id)
-      })
+      if(state[action.name]) {
+        resources = {
+          ...state[action.name],
+          ...resources
+        }
+      } else {
+        resources = {
+          data: {},
+          pageData: {},
+          ...resources
+        }
+      }
+      if(!(resources.pageData[page] && resources.pageData[page].length)) {
+        resources.pageData[page] = []
+        action.payload.results.forEach(el => {
+          resources.data[el.id] = el
+          resources.pageData[page].push(el.id)
+        })
+      }
       return {...state, [action.name]: resources}
     case FETCH_RESOURCES_BY_NAME_FAILURE:
       return {...state, error: action.payload}
