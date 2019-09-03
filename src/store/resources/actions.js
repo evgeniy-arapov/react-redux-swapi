@@ -49,7 +49,7 @@ export function getResourcesByName (name, params = {}) {
       let response
       if(resourcesMeta.page === page) {
         response = {
-          results: resourcesSelectors.getResources(getState(), name),
+          results: resourcesSelectors.getPageResources(getState(), name),
           ...resourcesMeta
         }
       }

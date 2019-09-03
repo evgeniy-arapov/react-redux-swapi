@@ -26,8 +26,6 @@ function resource (state, action) {
         }
       } else {
         resources = {
-          count: 0,
-          page: null,
           data: {}
         }
       }
@@ -48,11 +46,13 @@ function resources (state, action) {
       const resourceData = (state[action.name] && state[action.name].data) || {}
       const resources = {
         count: action.payload.count,
-        page: action.payload.page || state[action.name.page] || 1,
-        data: {...resourceData}
+        page: state[action.name.page] || 1,
+        data: {...resourceData},
+        pageData: []
       }
       action.payload.results.forEach(el => {
         resources.data[el.id] = el
+        resources.pageData.push(el.id)
       })
       return {...state, [action.name]: resources}
     case FETCH_RESOURCES_BY_NAME_FAILURE:

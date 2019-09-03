@@ -35,7 +35,7 @@ class ResourceList extends Component {
 
 export default withRouter(connect(
   (state, props) => ({
-    data: resourcesSelectors.getResources(state, props.match.params.resourceName)
+    data: resourcesSelectors.getPageResources(state, props.match.params.resourceName)
   }),
   {
     getResources: resourcesActions.getResourcesByName

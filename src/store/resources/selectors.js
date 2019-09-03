@@ -7,6 +7,12 @@ export function getResources (state, name) {
   return Object.keys(resources).map(el => resources[el])
 }
 
+export function getPageResources (state, name) {
+  const resources = (state.resources[name] && state.resources[name].data) || {}
+  const resourcesPage = (state.resources[name] && state.resources[name].pageData) || []
+  return resourcesPage.map(el => resources[el])
+}
+
 export function getResourcesMeta (state, name) {
   return state.resources[name] && {page: state.resources[name].page, count: state.resources[name].count}
 }
