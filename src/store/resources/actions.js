@@ -28,6 +28,7 @@ export function getResource (name, id) {
         name,
         payload: error
       })
+      throw error
     }
   }
 }
@@ -74,6 +75,7 @@ export function getResourcesByName (name, params = {}) {
         page,
         payload: error
       })
+      throw error
     }
   }
 }
@@ -98,6 +100,7 @@ export function getResourcesMap () {
         type: FETCH_RESOURCES_MAP_FAILURE,
         payload: error
       })
+      throw error
     }
   }
 }

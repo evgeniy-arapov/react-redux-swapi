@@ -5,5 +5,8 @@ import rootReducer from "./reducers"
 
 export default createStore(
     rootReducer,
-    applyMiddleware(thunk, errorHandler)
+    applyMiddleware(
+      thunk
+      ,errorHandler
+    )
 )

@@ -9,25 +9,32 @@ class ResourceItem extends Component {
     super(props)
     this.state = {
       resolvedData: null,
-      isFetching: false
+      isFetching: false,
+      error: null
     }
   }
 
-  componentDidMount () {
-    this.props.getResourceItem(this.props.match.params.resourceName, this.props.match.params.itemId)
+  async componentDidMount () {
+    this.setState({isFetching: true})
+    try {
+      await this.props.getResourceItem(this.props.match.params.resourceName, this.props.match.params.itemId)
+    } catch (error) {
+      this.setState({error})
+    } finally {
+      this.setState({isFetching: false})
+    }
   }
 
   async componentDidUpdate (prevProps, prevState, snapshot) {
-    if (this.state.isFetching) return
-    
+    if (this.state.isFetching || this.state.error) return
+
     const data = this.props.data
     const resolvedData = this.state.resolvedData
     const isRouteChanged = this.props.match.url !== prevProps.match.url
-    if(isRouteChanged) this.setState({resolvedData: null})
+    if (isRouteChanged) this.setState({resolvedData: null})
     if (!data || resolvedData) return
 
-    this.setState({isFetching: true})
-    
+
     const newResolvedData = {...data}
     const promiseArray = []
     const relatedProps = {}
@@ -54,6 +61,8 @@ class ResourceItem extends Component {
         }
       }
     })
+    
+    this.setState({isFetching: true})
     try {
       await Promise.all(promiseArray)
       Object.keys(relatedProps).forEach(key => {
@@ -67,7 +76,7 @@ class ResourceItem extends Component {
       newResolvedData.relatedProps = Object.keys(relatedProps)
       this.setState({resolvedData: newResolvedData})
     } catch (e) {
-      console.log("resolve failure")
+      this.setState({error: e})
       console.error(e)
     } finally {
       this.setState({isFetching: false})
@@ -78,7 +87,10 @@ class ResourceItem extends Component {
     return (
       <div>
         {
-          this.state.resolvedData ? <ShowItem data={this.state.resolvedData}/> : "wait..."
+          this.state.isFetching ? "wait..." :
+            this.state.error ? this.state.error.message :
+              this.state.resolvedData ? <ShowItem data={this.state.resolvedData}/> :
+                null
         }
       </div>
     )

@@ -10,15 +10,14 @@ class ResourceList extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isFetching: false
+      isFetching: false,
+      error: null
     }
   }
 
   async componentDidMount () {
     const page = new URL(window.location.href).searchParams.get("page")
-    this.setState({isFetching: true})
-    await this.props.getResources(this.props.match.params.resourceName, {page})
-    this.setState({isFetching: false})
+    await this.getResources(this.props.match.params.resourceName, page)
   }
 
   async componentDidUpdate (prevProps, prevState, snapshot) {
@@ -27,9 +26,19 @@ class ResourceList extends Component {
     const {search, pathname} = prevProps.location
     const prevUrl = new URL(pathname + search, window.location.href)
     if (currentUrl.href !== prevUrl.href) {
-      this.setState({isFetching: true})
-      await this.props.getResources(this.props.match.params.resourceName, {page})
-      this.setState({isFetching: false})    }
+      await this.getResources(this.props.match.params.resourceName, page)
+    }
+  }
+  
+  async getResources (name, page) {
+    this.setState({isFetching: true, error: null})
+    try {
+      await this.props.getResources(name, {page})
+    } catch (error) {
+      this.setState({error})
+    } finally {
+      this.setState({isFetching: false})
+    }
   }
 
   _keyExtractor (el) {
@@ -43,11 +52,12 @@ class ResourceList extends Component {
         <Pagination meta={this.props.resourcesMeta}/>
         {
           this.state.isFetching ? "wait..." :
-            <ListView
-              data={data}
-              renderItem={item => <ListItem data={item} location={this.props.location}/>}
-              keyExtractor={this._keyExtractor}
-            />
+            this.state.error ? this.state.error.message :
+              <ListView
+                data={data}
+                renderItem={item => <ListItem data={item} location={this.props.location}/>}
+                keyExtractor={this._keyExtractor}
+              />
         }
         <Pagination meta={this.props.resourcesMeta}/>
       </div>
