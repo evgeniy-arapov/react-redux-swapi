@@ -13,14 +13,12 @@ import {
 } from "store/resources/actions"
 
 function resource (state, action) {
-  console.log(action.type)
-  console.log("action.name: ", action.name)
   switch (action.type) {
     case FETCH_RESOURCE_REQUEST:
       return {...state, error: null}
     case FETCH_RESOURCE_SUCCESS:
       let resources
-      if(state[action.name]) {
+      if (state[action.name]) {
         resources = {
           ...state[action.name]
         }
@@ -43,25 +41,28 @@ function resources (state, action) {
     case FETCH_RESOURCES_BY_NAME_REQUEST:
       return {...state, error: null}
     case FETCH_RESOURCES_BY_NAME_SUCCESS:
-      const page = action.page || 1
       let resources = {
         count: action.payload.count,
-        page,
+        ...action.params
       }
-      if(state[action.name]) {
+      if (state[action.name]) {
         resources = {
           ...state[action.name],
           ...resources
         }
-      } else {
-        resources = {
-          data: {},
-          pageData: {},
-          ...resources
-        }
       }
-      if(!(resources.pageData && resources.pageData[page] && resources.pageData[page].length)) {
-        if(!resources.pageData) resources.pageData = {}
+      if (!resources.data) resources.data = {}
+      if (!resources.pageData) resources.pageData = {}
+
+      const {page} = action.params
+
+      if (resources.search) {
+        resources.searchPageIds = []
+        action.payload.results.forEach(el => {
+          resources.data[el.id] = el
+          resources.searchPageIds.push(el.id)
+        })
+      } else if (!(resources.pageData[page] && resources.pageData[page].length)) {
         resources.pageData[page] = []
         action.payload.results.forEach(el => {
           resources.data[el.id] = el

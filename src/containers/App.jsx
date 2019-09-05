@@ -27,10 +27,12 @@ class App extends React.Component {
     return (
       <div className="App">
         <Header linksNames={this.props.resourcesNames}/>
-        <Switch>
-          <Route exact path="/:resourceName" component={ResourceList}/>
-          <Route path="/:resourceName/:itemId" component={ResourceItem}/>
-        </Switch>
+        <div className="container">
+          <Switch>
+            <Route exact path="/:resourceName" component={ResourceList}/>
+            <Route path="/:resourceName/:itemId" component={ResourceItem}/>
+          </Switch>
+        </div>
       </div>
     )
   }

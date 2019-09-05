@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom"
 import { resourcesActions, resourcesSelectors } from "store/resources"
 import ListItem from "components/ListItem"
 import Pagination from "components/Pagination"
+import Search from "components/Search"
 
 class ResourceList extends Component {
   constructor (props) {
@@ -17,7 +18,7 @@ class ResourceList extends Component {
 
   async componentDidMount () {
     const page = new URL(window.location.href).searchParams.get("page")
-    await this.getResources(this.props.match.params.resourceName, page)
+    await this.getResources(this.props.match.params.resourceName, {page})
   }
 
   async componentDidUpdate (prevProps, prevState, snapshot) {
@@ -26,19 +27,24 @@ class ResourceList extends Component {
     const {search, pathname} = prevProps.location
     const prevUrl = new URL(pathname + search, window.location.href)
     if (currentUrl.href !== prevUrl.href) {
-      await this.getResources(this.props.match.params.resourceName, page)
+      await this.getResources(this.props.match.params.resourceName, {page})
     }
   }
   
-  async getResources (name, page) {
+  async getResources (name, params) {
     this.setState({isFetching: true, error: null})
     try {
-      await this.props.getResources(name, {page})
+      await this.props.getResources(name, params)
     } catch (error) {
       this.setState({error})
     } finally {
       this.setState({isFetching: false})
     }
+  }
+  
+  async updateSearch (search) {
+    await this.getResources(this.props.match.params.resourceName, {page: 1, search})
+    this.props.history.push({search: "page=1"})
   }
 
   _keyExtractor (el) {
@@ -47,8 +53,12 @@ class ResourceList extends Component {
 
   render () {
     const {data} = this.props
+
     return (
       <div>
+        <Search 
+          searchProp={this.props.resourcesMeta.search}
+          updateSearch={this.updateSearch.bind(this)}/>
         <Pagination meta={this.props.resourcesMeta}/>
         {
           this.state.isFetching ? "wait..." :
