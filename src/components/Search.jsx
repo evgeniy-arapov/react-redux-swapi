@@ -1,45 +1,36 @@
 import React, { Component } from "react"
+import debounce from "lodash/debounce"
 
 class Search extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      searchStr: ""
-    }
     this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.searchInput = React.createRef()
   }
 
   componentDidUpdate (prevProps, prevState, snapshot) {
-    if (prevProps.searchProp !== this.props.searchProp) {
-      this.setState({
-        searchStr: this.props.searchProp || ""
-      })
+    if (prevProps.resourceName !== this.props.resourceName) {
+      this.searchInput.current.value = this.props.searchProp || ""
     }
   }
 
-  handleChange (e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
+  debounceUpdateSearch = debounce(this.props.updateSearch, 300)
 
-  handleSubmit (e) {
-    e.preventDefault()
-    this.props.updateSearch(this.state.searchStr)
+  handleChange (e) {
+    this.debounceUpdateSearch(e.target.value)
   }
 
   render () {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <form>
           <label>
-            Search: <button>Search</button>
+            Search:
             <br/>
             <input type="text"
                    onChange={this.handleChange}
-                   name="searchStr"
-                   value={this.state.searchStr}/>
+                   ref={this.searchInput}
+                   name="searchStr"/>
           </label>
         </form>
       </div>

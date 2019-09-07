@@ -57,6 +57,7 @@ class ResourceList extends Component {
     return (
       <div>
         <Search 
+          resourceName={this.props.match.params.resourceName}
           searchProp={this.props.resourcesMeta.search}
           updateSearch={this.updateSearch.bind(this)}/>
         <Pagination meta={this.props.resourcesMeta}/>
