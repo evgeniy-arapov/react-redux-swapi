@@ -1,10 +1,11 @@
 import React from "react"
 import { connect } from "react-redux"
+import { Container } from "@material-ui/core"
 import Header from "components/layout/Header"
 import "./App.scss"
 import { resourcesActions, resourcesSelectors } from "store/resources"
 import { errorsSelectors } from "store/common/errorsReducer"
-import { Route, Switch} from "react-router-dom"
+import { Route, Switch } from "react-router-dom"
 import ResourceList from "containers/ResourceList"
 import ResourceItem from "containers/ResourceItem"
 
@@ -27,12 +28,12 @@ class App extends React.Component {
     return (
       <div className="App">
         <Header linksNames={this.props.resourcesNames}/>
-        <div className="container">
+        <Container>
           <Switch>
             <Route exact path="/:resourceName" component={ResourceList}/>
             <Route path="/:resourceName/:itemId" component={ResourceItem}/>
           </Switch>
-        </div>
+        </Container>
       </div>
     )
   }

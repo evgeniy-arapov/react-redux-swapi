@@ -6,6 +6,8 @@ import { resourcesActions, resourcesSelectors } from "store/resources"
 import ListItem from "components/ListItem"
 import Pagination from "components/Pagination"
 import Search from "components/Search"
+import Typography from "@material-ui/core/Typography"
+import { capitalize } from "lodash"
 
 class ResourceList extends Component {
   constructor (props) {
@@ -56,11 +58,13 @@ class ResourceList extends Component {
 
     return (
       <div>
+        <Typography variant="h2">
+          {capitalize(this.props.match.params.resourceName)}
+        </Typography>
         <Search 
           resourceName={this.props.match.params.resourceName}
           searchProp={this.props.resourcesMeta.search}
           updateSearch={this.updateSearch.bind(this)}/>
-        <Pagination meta={this.props.resourcesMeta}/>
         {
           this.state.isFetching ? "wait..." :
             this.state.error ? this.state.error.message :
