@@ -1,0 +1,28 @@
+.show-item {
+  .show-item__title {
+    
+  }
+
+  .show-item__prop {
+    display: table-row;
+    padding-bottom: 5px;
+    > * {
+      padding-bottom: 10px;
+    }
+  }
+  .show-item__prop-name {
+    display: table-cell;
+    text-align: right;
+  }
+  .show-item__prop-value {
+    display: table-cell;
+    padding-left: 15px;
+    > * {
+      margin-bottom: 5px;
+    }
+    
+    a {
+      color: darkblue;
+    }
+  }
+}

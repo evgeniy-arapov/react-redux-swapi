@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
+import { upperFirst, lowerCase } from "lodash"
+import "./ShowItem.scss"
 
 class ShowItem extends Component {
   renderLinkItem (item) {
@@ -25,17 +27,22 @@ class ShowItem extends Component {
     const {data} = this.props
     const privateFields = ["id", "created", "edited", "relatedProps", "url"]
     return (
-      <div>
+      <div className={"show-item"}>
         {Object.keys(data).filter(key => !privateFields.includes(key))
           .map(el => {
+            if (el === "name" || el === "title") {
+               return <h2 key={el} className={"show-item__title"}>{upperFirst(lowerCase(data[el]))}</h2>
+            }
             return (
-              <div key={el} style={{display: "flex", border: "1px solid gray", width: "450px"}}>
-                <div style={{width: "120px", textAlign: "left"}}>{`${el}:`}</div>
-                <div style={{display: "flex", flexDirection: "column", marginLeft: "10px"}}>
+              <div key={el} className={"show-item__prop"}>
+                <div className={"show-item__prop-name"}>
+                  {upperFirst(lowerCase(el)) + ":"}
+                </div>
+                <div className={"show-item__prop-value"}>
                   {
                     data.relatedProps.includes(el) ?
                       this.renderRelation(data[el]) :
-                      `${data[el]}`
+                      data[el]
                   }
                 </div>
               </div>

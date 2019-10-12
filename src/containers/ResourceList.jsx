@@ -32,7 +32,7 @@ class ResourceList extends Component {
       await this.getResources(this.props.match.params.resourceName, {page})
     }
   }
-  
+
   async getResources (name, params) {
     this.setState({isFetching: true, error: null})
     try {
@@ -43,7 +43,7 @@ class ResourceList extends Component {
       this.setState({isFetching: false})
     }
   }
-  
+
   async updateSearch (search) {
     await this.getResources(this.props.match.params.resourceName, {page: 1, search})
     this.props.history.push({search: "page=1"})
@@ -57,14 +57,13 @@ class ResourceList extends Component {
     const {data} = this.props
 
     return (
-      <div>
-        <Typography variant="h2">
+      <div className={"resource-list"}>
+        <Typography variant="h2" gutterBottom>
           {capitalize(this.props.match.params.resourceName)}
         </Typography>
-        <Search 
-          resourceName={this.props.match.params.resourceName}
-          searchProp={this.props.resourcesMeta.search}
-          updateSearch={this.updateSearch.bind(this)}/>
+        <Search resourceName={this.props.match.params.resourceName}
+                searchProp={this.props.resourcesMeta.search}
+                updateSearch={this.updateSearch.bind(this)}/>
         {
           this.state.isFetching ? "wait..." :
             this.state.error ? this.state.error.message :

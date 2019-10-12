@@ -1,5 +1,14 @@
 import React, { Component } from "react"
 import debounce from "lodash/debounce"
+import TextField from "@material-ui/core/TextField"
+import { createMuiTheme } from "@material-ui/core/styles"
+import { ThemeProvider } from "@material-ui/styles"
+
+const theme = createMuiTheme({
+  palette: {
+    type: "light"
+  }
+})
 
 class Search extends Component {
   constructor (props) {
@@ -22,17 +31,20 @@ class Search extends Component {
 
   render () {
     return (
-      <div>
-        <form>
-          <label>
-            Search:
-            <br/>
-            <input type="text"
-                   onChange={this.handleChange}
-                   ref={this.searchInput}
-                   name="searchStr"/>
-          </label>
-        </form>
+      <div className={"search"}>
+        <ThemeProvider theme={theme}>
+          <form noValidate autoComplete="off">
+            <TextField
+              id="outlined-name"
+              label="Search"
+              defaultValue={this.props.searchProp}
+              ref={this.searchInput}
+              onChange={this.handleChange}
+              margin="normal"
+              variant="outlined"
+            />
+          </form>
+        </ThemeProvider>
       </div>
     )
   }

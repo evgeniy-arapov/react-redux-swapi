@@ -13,6 +13,9 @@ const theme = createMuiTheme({
     primary: {
       main: "#424242"
     },
+    secondary: {
+      main: "rgb(1255,0,0)"
+    },
     type: "dark"
   },
   breakpoints: {
