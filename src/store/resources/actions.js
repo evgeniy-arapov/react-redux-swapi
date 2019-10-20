@@ -43,7 +43,6 @@ export function getResourcesByName (name, params = {}) {
     const page = params.page || 1
     const search = params.search !== undefined ? params.search : resourcesMeta.search
     const dispatchParams = {search, page}
-    console.log(dispatchParams)
     dispatch({
       type: FETCH_RESOURCES_BY_NAME_REQUEST,
       name,

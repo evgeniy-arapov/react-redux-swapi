@@ -25,7 +25,6 @@ export function getPageResources (state, name, params) {
 export function getResourcesMeta (state, name) {
   const resources = state.resources[name]
   if (resources && resources.pageData) {
-    console.log(resources)
     const page = +resources.page
     const count = +resources.count
     const perPage = 10

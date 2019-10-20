@@ -31,7 +31,7 @@ class ShowItem extends Component {
         {Object.keys(data).filter(key => !privateFields.includes(key))
           .map(el => {
             if (el === "name" || el === "title") {
-               return <h2 key={el} className={"show-item__title"}>{upperFirst(lowerCase(data[el]))}</h2>
+               return <h2 key={el} className={"show-item__title"}>{data[el]}</h2>
             }
             return (
               <div key={el} className={"show-item__prop"}>

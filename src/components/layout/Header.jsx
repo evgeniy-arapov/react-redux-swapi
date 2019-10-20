@@ -5,7 +5,6 @@ import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import IconButton from "@material-ui/core/IconButton"
 import MenuIcon from "@material-ui/icons/Menu"
-import Typography from "@material-ui/core/Typography"
 import Container from "@material-ui/core/Container"
 import Hidden from "@material-ui/core/Hidden"
 import Drawer from "@material-ui/core/Drawer"
@@ -13,6 +12,7 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import { makeStyles } from "@material-ui/core/styles"
+import logo from "assets/images/logo.jpg"
 
 const drawerWidth = 240
 const useStyles = makeStyles(theme => ({
@@ -46,10 +46,8 @@ export default function Header (props) {
               <MenuIcon/>
             </IconButton>
           </Hidden>
-          <Link to="/">
-            <Typography variant="h6">
-              StarWars
-            </Typography>
+          <Link to="/" className={"header__brand"}>
+              <img src={logo} className={"header__logo"} alt="logo"/>
           </Link>
           <div style={{flexGrow: 1}}/>
           <Hidden xsDown>

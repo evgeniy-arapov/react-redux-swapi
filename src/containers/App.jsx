@@ -1,6 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { Container } from "@material-ui/core"
+import CircularProgress from "@material-ui/core/CircularProgress"
 import Header from "components/layout/Header"
 import "./App.scss"
 import { resourcesActions, resourcesSelectors } from "store/resources"
@@ -10,8 +11,22 @@ import ResourceList from "containers/ResourceList"
 import ResourceItem from "containers/ResourceItem"
 
 class App extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isLoading: false
+    }
+  }
+
   async componentDidMount () {
-    this.props.getResourcesMap()
+    try {
+      this.setState({isLoading: true})
+      await this.props.getResourcesMap()
+    } catch (e) {
+      throw e
+    } finally {
+      //this.setState({isLoading: false})
+    }
   }
 
   componentDidCatch (error, errorInfo) {
@@ -19,12 +34,12 @@ class App extends React.Component {
   }
 
   render () {
-    console.log(this.props)
     const {errors} = this.props
     if (errors && errors.length) {
       console.warn("ERRORS")
       console.error(errors)
     }
+
     return (
       <div className="App">
         <Header linksNames={this.props.resourcesNames}/>
@@ -34,6 +49,12 @@ class App extends React.Component {
             <Route path="/:resourceName/:itemId" component={ResourceItem}/>
           </Switch>
         </Container>
+
+        {this.state.isLoading &&
+        <div className="loader">
+          <CircularProgress color="primary" size={100}/>
+        </div>
+        }
       </div>
     )
   }

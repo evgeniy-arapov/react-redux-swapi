@@ -3,7 +3,7 @@ import axios from "axios"
 const baseAPIUrl = "https://swapi.co/api"
 
 export async function getResourcesMap () {
-  const {data} = await axios.get(baseAPIUrl + "/")
+  const {data} = await axios.get(baseAPIUrl + "/", { cache: "default"})
   return data
 }
 

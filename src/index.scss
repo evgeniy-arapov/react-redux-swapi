@@ -5,6 +5,7 @@ body {
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
 }
 
 code {
@@ -15,4 +16,9 @@ code {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+#root, .App {
+  height: 100%;
+  position: relative;
 }
