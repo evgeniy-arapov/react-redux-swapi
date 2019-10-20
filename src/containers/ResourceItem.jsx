@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import { resourcesSelectors, resourcesActions } from "store/resources"
 import ShowItem from "components/ShowItem"
+import Loader from "components/ui/Loader"
 
 class ResourceItem extends Component {
   constructor (props) {
@@ -87,11 +88,11 @@ class ResourceItem extends Component {
     return (
       <div>
         {
-          this.state.isFetching ? "wait..." :
-            this.state.error ? this.state.error.message :
+          this.state.error ? this.state.error.message :
               this.state.resolvedData ? <ShowItem data={this.state.resolvedData}/> :
                 null
         }
+        <Loader show={this.state.isFetching}/>
       </div>
     )
   }

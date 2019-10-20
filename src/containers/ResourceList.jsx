@@ -8,6 +8,7 @@ import Pagination from "components/Pagination"
 import Search from "components/Search"
 import Typography from "@material-ui/core/Typography"
 import { capitalize } from "lodash"
+import Loader from "components/ui/Loader"
 
 class ResourceList extends Component {
   constructor (props) {
@@ -65,15 +66,15 @@ class ResourceList extends Component {
                 searchProp={this.props.resourcesMeta.search}
                 updateSearch={this.updateSearch.bind(this)}/>
         {
-          this.state.isFetching ? "wait..." :
-            this.state.error ? this.state.error.message :
-              <ListView
-                data={data}
-                renderItem={item => <ListItem data={item} location={this.props.location}/>}
-                keyExtractor={this._keyExtractor}
-              />
+          this.state.error ? this.state.error.message :
+            <ListView
+              data={data}
+              renderItem={item => <ListItem data={item} location={this.props.location}/>}
+              keyExtractor={this._keyExtractor}
+            />
         }
         <Pagination meta={this.props.resourcesMeta}/>
+        <Loader show={this.state.isFetching}/>
       </div>
     )
   }

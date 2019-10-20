@@ -1,7 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
 import { Container } from "@material-ui/core"
-import CircularProgress from "@material-ui/core/CircularProgress"
 import Header from "components/layout/Header"
 import "./App.scss"
 import { resourcesActions, resourcesSelectors } from "store/resources"
@@ -9,6 +8,7 @@ import { errorsSelectors } from "store/common/errorsReducer"
 import { Route, Switch } from "react-router-dom"
 import ResourceList from "containers/ResourceList"
 import ResourceItem from "containers/ResourceItem"
+import Loader from "components/ui/Loader"
 
 class App extends React.Component {
   constructor (props) {
@@ -25,7 +25,7 @@ class App extends React.Component {
     } catch (e) {
       throw e
     } finally {
-      //this.setState({isLoading: false})
+      this.setState({isLoading: false})
     }
   }
 
@@ -49,12 +49,7 @@ class App extends React.Component {
             <Route path="/:resourceName/:itemId" component={ResourceItem}/>
           </Switch>
         </Container>
-
-        {this.state.isLoading &&
-        <div className="loader">
-          <CircularProgress color="primary" size={100}/>
-        </div>
-        }
+        <Loader show={this.state.isLoading}/>
       </div>
     )
   }
