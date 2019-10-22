@@ -21,12 +21,15 @@
     "redux-thunk": "^2.3.0",
     "typeface-roboto": "0.0.75"
   },
+  "homepage":"https://evgeniy-arapov.github.io/react-redux-swapi/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "watch": "NODE_PATH=src cra-build-watch -v",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
