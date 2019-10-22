@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { Container } from "@material-ui/core"
 import Header from "components/layout/Header"
@@ -10,49 +10,43 @@ import ResourceList from "containers/ResourceList"
 import ResourceItem from "containers/ResourceItem"
 import Loader from "components/ui/Loader"
 
-class App extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      isLoading: false
-    }
-  }
+function App (props) {
+  const [isLoading, setIsLoading] = useState(false)
+  const {
+          getResourcesMap,
+          resourcesNames,
+          errors
+        } = props
 
-  async componentDidMount () {
-    try {
-      this.setState({isLoading: true})
-      await this.props.getResourcesMap()
-    } catch (e) {
-      throw e
-    } finally {
-      this.setState({isLoading: false})
-    }
-  }
+  useEffect(() => {
+    (async () => {
+      try {
+        setIsLoading(true)
+        await getResourcesMap()
+      } catch (e) {
+        throw e
+      } finally {
+        setIsLoading(false)
+      }
+    })()
+  }, [getResourcesMap])
 
-  componentDidCatch (error, errorInfo) {
-    console.error(arguments)
+  if (errors && errors.length) {
+    console.warn("ERRORS")
+    console.error(errors)
   }
-
-  render () {
-    const {errors} = this.props
-    if (errors && errors.length) {
-      console.warn("ERRORS")
-      console.error(errors)
-    }
-
-    return (
-      <div className="App">
-        <Header linksNames={this.props.resourcesNames}/>
-        <Container>
-          <Switch>
-            <Route exact path="/:resourceName" component={ResourceList}/>
-            <Route path="/:resourceName/:itemId" component={ResourceItem}/>
-          </Switch>
-        </Container>
-        <Loader show={this.state.isLoading}/>
-      </div>
-    )
-  }
+  return (
+    <div className="App">
+      <Header linksNames={resourcesNames}/>
+      <Container>
+        <Switch>
+          <Route exact path="/:resourceName" component={ResourceList}/>
+          <Route path="/:resourceName/:itemId" component={ResourceItem}/>
+        </Switch>
+      </Container>
+      <Loader show={isLoading}/>
+    </div>
+  )
 }
 
 export default connect(
