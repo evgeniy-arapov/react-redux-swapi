@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React from "react"
 import debounce from "lodash/debounce"
 import TextField from "@material-ui/core/TextField"
 import { createMuiTheme } from "@material-ui/core/styles"
@@ -11,16 +11,10 @@ const theme = createMuiTheme({
 })
 
 export default function Search ({resourceName, searchProp, updateSearch}) {
-  let [searchString, setSearchString] = useState("")
+  const debouncedUpdateSearch = debounce(updateSearch, 300)
   
-  const debouncedUpdateSearch = useCallback(debounce(updateSearch, 300), []) 
-  
-  useEffect(() => {
-    debouncedUpdateSearch(searchString)
-  }, [searchString, debouncedUpdateSearch])
-
   function handleChange (e) {
-    setSearchString(e.target.value)
+    debouncedUpdateSearch(e.target.value)
   }
 
   return (
@@ -28,7 +22,7 @@ export default function Search ({resourceName, searchProp, updateSearch}) {
       <ThemeProvider theme={theme}>
         <form noValidate autoComplete="off">
           <TextField
-            id="outlined-name"
+            key={resourceName}
             label="Search"
             defaultValue={searchProp}
             onChange={handleChange}
