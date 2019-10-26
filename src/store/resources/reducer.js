@@ -41,33 +41,49 @@ function resources (state, action) {
     case FETCH_RESOURCES_BY_NAME_REQUEST:
       return {...state, error: null}
     case FETCH_RESOURCES_BY_NAME_SUCCESS:
-      let resources = {
+      let resources = {}
+      const {page, search} = action.params
+      const meta = {
         count: action.payload.count,
-        ...action.params
+        page
       }
+
       if (state[action.name]) {
         resources = {
           ...state[action.name],
-          ...resources
+          search
         }
       }
+
       if (!resources.data) resources.data = {}
-      if (!resources.pageData) resources.pageData = {}
 
-      const {page} = action.params
 
-      if (resources.search) {
-        resources.searchPageIds = []
+      if (search) {
+        resources.searchMap = {
+          ...meta,
+          pageIndexes: []
+        }
         action.payload.results.forEach(el => {
           resources.data[el.id] = el
-          resources.searchPageIds.push(el.id)
+          resources.searchMap.pageIndexes.push(el.id)
         })
-      } else if (!(resources.pageData[page] && resources.pageData[page].length)) {
-        resources.pageData[page] = []
-        action.payload.results.forEach(el => {
-          resources.data[el.id] = el
-          resources.pageData[page].push(el.id)
-        })
+      } else {
+        if (!resources.pageMap) {
+          resources.pageMap = {
+            pagesIndexes: []
+          }
+        }
+        resources.pageMap = {
+          ...resources.pageMap,
+          ...meta
+        }
+        if (!(resources.pageMap.pagesIndexes[page] && resources.pageMap.pagesIndexes[page].length)) {
+          resources.pageMap.pagesIndexes[page] = []
+          action.payload.results.forEach(el => {
+            resources.data[el.id] = el
+            resources.pageMap.pagesIndexes[page].push(el.id)
+          })
+        }
       }
       return {...state, [action.name]: resources}
     case FETCH_RESOURCES_BY_NAME_FAILURE:
@@ -94,3 +110,33 @@ export default reduceReducers({
   resourcesMap: {},
   error: null
 }, resourcesMap, resources, resource)
+
+
+//const stateSchema = {
+//  resourcesMap: {
+//    resource: String
+//  },
+//  error: null,
+//  resource: {
+//    search: String,
+//    data: {
+//      index: Object
+//    },
+//    pageMap: {
+//      count: Number,
+//      page: Number,
+//      pagesIndexes: {
+//        index: [
+//          Number
+//        ]
+//      }
+//    },
+//    searchMap: {
+//      count: Number,
+//      page: Number,
+//      pageIndexes: [
+//        Number
+//      ]
+//    }
+//  }
+//}
