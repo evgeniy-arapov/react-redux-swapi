@@ -39,9 +39,8 @@ export const FETCH_RESOURCES_BY_NAME_FAILURE = "FETCH_RESOURCES_BY_NAME_FAILURE"
 
 export function getResourcesByName (name, params = {}) {
   return async (dispatch, getState) => {
-    const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name)
     const page = params.page || 1
-    const search = params.search !== undefined ? params.search : resourcesMeta.search
+    const search = params.search
     const dispatchParams = {search, page}
     dispatch({
       type: FETCH_RESOURCES_BY_NAME_REQUEST,
@@ -49,26 +48,11 @@ export function getResourcesByName (name, params = {}) {
       params: dispatchParams
     })
     try {
+      const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name, params.search)
       let response
-      if (!dispatchParams.search) {
-        if (resourcesMeta.count) {
-          const pageResources = resourcesSelectors.getPageResources(getState(), name, dispatchParams)
-          if (pageResources.length) {
-            response = {
-              results: pageResources,
-              ...resourcesMeta
-            }
-          }
-        }
-      }
       
-      // cached only last searching, so if this searching identical by last searching then get items from cache 
-      if (
-        dispatchParams.search &&
-        +page === +resourcesMeta.page &&
-        (params.search === undefined || params.search === resourcesMeta.search)
-      ) {
-        const pageResources = resourcesSelectors.getPageResources(getState(), name)
+      if (!search || search === resourcesMeta.search) {
+        const pageResources = resourcesSelectors.getPageResources(getState(), name, dispatchParams)
         if (pageResources.length) {
           response = {
             results: pageResources,
@@ -76,7 +60,7 @@ export function getResourcesByName (name, params = {}) {
           }
         }
       }
-      
+
       if (!response) {
         response = await swapiService.getResourcesByName(name, dispatchParams)
           .then(res => ({...res, results: res.results.map(el => serializeResource(el))}))

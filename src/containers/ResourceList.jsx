@@ -48,7 +48,8 @@ function ResourceList ({data, history, resourcesMeta, location, getResources, ..
         {capitalize(resourceName)}
       </Typography>
       <Search resourceName={resourceName}
-              searchProp={resourcesMeta.search}
+              isSearch={resourcesMeta.isSearch}
+              searchString={resourcesMeta.search}
               updateSearch={updateSearch}/>
       {
         error ? error.message :

@@ -11,9 +11,8 @@ export function getPageResources (state, name, params) {
   const resources = state.resources[name]
   let resourcesPage
   if (resources) {
-    const search = params ? params.search : resources.search
-
-    if (search) {
+    const isSearch = params ? !!params.search : resources.search
+    if (isSearch) {
       resourcesPage = resources.searchMap.pageIndexes
     } else {
       const page = params ? params.page : resources.pageMap.page
@@ -23,12 +22,13 @@ export function getPageResources (state, name, params) {
   return resourcesPage ? resourcesPage.map(el => resources.data[el]) : []
 }
 
-export function getResourcesMeta (state, name) {
+export function getResourcesMeta (state, name, search = null) {
   const resources = state.resources[name]
 
   if (resources) {
-    const search = resources.search
-    const currentMap = search ? resources.searchMap : resources.pageMap
+    const isSearch = search !== null ? !!search : resources.search
+    const searchString = resources.searchMap && resources.searchMap.search
+    const currentMap = isSearch ? resources.searchMap : resources.pageMap
     if (currentMap) {
       const page = +currentMap.page
       const count = +currentMap.count
@@ -40,7 +40,8 @@ export function getResourcesMeta (state, name) {
         count,
         perPage,
         lastPage,
-        search
+        search: searchString,
+        isSearch
       }
     }
   }

@@ -10,7 +10,7 @@ const theme = createMuiTheme({
   }
 })
 
-export default function Search ({resourceName, searchProp, updateSearch}) {
+export default function Search ({resourceName, isSearch, searchString, updateSearch}) {
   const debouncedUpdateSearch = debounce(updateSearch, 300)
   
   function handleChange (e) {
@@ -24,7 +24,7 @@ export default function Search ({resourceName, searchProp, updateSearch}) {
           <TextField
             key={resourceName}
             label="Search"
-            defaultValue={searchProp}
+            defaultValue={isSearch ? searchString : ""}
             onChange={handleChange}
             margin="normal"
             variant="outlined"

@@ -51,7 +51,7 @@ function resources (state, action) {
       if (state[action.name]) {
         resources = {
           ...state[action.name],
-          search
+          search: !!search
         }
       }
 
@@ -61,6 +61,7 @@ function resources (state, action) {
       if (search) {
         resources.searchMap = {
           ...meta,
+          search,
           pageIndexes: []
         }
         action.payload.results.forEach(el => {
@@ -118,7 +119,7 @@ export default reduceReducers({
 //  },
 //  error: null,
 //  resource: {
-//    search: String,
+//    search: Boolean,
 //    data: {
 //      index: Object
 //    },
@@ -132,6 +133,7 @@ export default reduceReducers({
 //      }
 //    },
 //    searchMap: {
+//      search: String,
 //      count: Number,
 //      page: Number,
 //      pageIndexes: [
