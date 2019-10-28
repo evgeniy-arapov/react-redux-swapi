@@ -1,3 +1,5 @@
+import getNested from "lodash/get"
+
 export function getResourcesNames (state) {
   return Object.keys(state.resources.resourcesMap)
 }
@@ -7,16 +9,16 @@ export function getResources (state, name) {
   return Object.keys(resources).map(el => resources[el])
 }
 
-export function getPageResources (state, name, params) {
+export function getPageResources (state, name, {page, search} = {}) {
   const resources = state.resources[name]
   let resourcesPage
   if (resources) {
-    const isSearch = params ? !!params.search : resources.search
+    const isSearch = search !== undefined ? search : resources.search
     if (isSearch) {
       resourcesPage = resources.searchMap.pageIndexes
     } else {
-      const page = params ? params.page : resources.pageMap.page
-      resourcesPage = resources.pageMap && resources.pageMap.pagesIndexes && resources.pageMap.pagesIndexes[page]
+      const currentPage = page || resources.pageMap.page
+      resourcesPage = getNested(resources, `pageMap.pagesIndexes[${currentPage}]`)
     }
   }
   return resourcesPage ? resourcesPage.map(el => resources.data[el]) : []
@@ -29,21 +31,24 @@ export function getResourcesMeta (state, name, search = null) {
     const isSearch = search !== null ? !!search : resources.search
     const searchString = resources.searchMap && resources.searchMap.search
     const currentMap = isSearch ? resources.searchMap : resources.pageMap
+    let meta = {
+      perPage: 10,
+      isSearch,
+      search: searchString
+    }
     if (currentMap) {
       const page = +currentMap.page
       const count = +currentMap.count
-      const perPage = 10
-      const lastPage = Math.ceil(count / perPage)
+      const lastPage = Math.ceil(count / meta.perPage)
 
-      return {
+      meta =  {
+        ...meta,
         page,
         count,
-        perPage,
-        lastPage,
-        search: searchString,
-        isSearch
+        lastPage
       }
     }
+    return meta
   }
   return {}
 }

@@ -39,8 +39,10 @@ export const FETCH_RESOURCES_BY_NAME_FAILURE = "FETCH_RESOURCES_BY_NAME_FAILURE"
 
 export function getResourcesByName (name, params = {}) {
   return async (dispatch, getState) => {
+    const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name, params.search)
     const page = params.page || 1
-    const search = params.search
+    const isSearch = resourcesMeta.isSearch
+    const search = params.search !== undefined ? params.search : isSearch && resourcesMeta.search
     const dispatchParams = {search, page}
     dispatch({
       type: FETCH_RESOURCES_BY_NAME_REQUEST,
@@ -48,15 +50,15 @@ export function getResourcesByName (name, params = {}) {
       params: dispatchParams
     })
     try {
-      const resourcesMeta = resourcesSelectors.getResourcesMeta(getState(), name, params.search)
       let response
-      
-      if (!search || search === resourcesMeta.search) {
+
+      if (!(params.search && params.search !== resourcesMeta.search)) {
         const pageResources = resourcesSelectors.getPageResources(getState(), name, dispatchParams)
         if (pageResources.length) {
           response = {
             results: pageResources,
-            ...resourcesMeta
+            ...resourcesMeta,
+            search
           }
         }
       }

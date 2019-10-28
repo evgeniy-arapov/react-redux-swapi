@@ -5,7 +5,6 @@ import RcPagination from "rc-pagination"
 import Hidden from "@material-ui/core/Hidden"
 
 export default function Pagination ({meta}) {
-
   const itemRender = (current, type, element) => {
     if (type === "page") {
       return <Link to={"?page=" + current}>{current}</Link>
