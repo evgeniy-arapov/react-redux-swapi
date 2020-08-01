@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom"
 import { resourcesSelectors, resourcesActions } from "store/resources"
 import ShowItem from "components/ShowItem"
 import Loader from "components/ui/Loader"
+import config from "config"
 
 class ResourceItem extends Component {
   constructor (props) {
@@ -55,14 +56,14 @@ class ResourceItem extends Component {
         })
       }
       if (typeof newResolvedData[key] === "string" && key !== "url") {
-        if (newResolvedData[key].includes("https://swapi.co/api/")) {
+        if (newResolvedData[key].includes(config.API_BASE_URL)) {
           const {name, id} = parseUrl(newResolvedData[key])
           promiseArray.push(this.props.getResourceItem(name, id))
           relatedProps[key] = {name, id}
         }
       }
     })
-    
+
     this.setState({isFetching: true})
     try {
       await Promise.all(promiseArray)
