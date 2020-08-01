@@ -1,5 +1,5 @@
-import * as resourcesActions from "./actions"
-import * as resourcesSelectors from "./selectors"
+import * as resourcesActions from './actions'
+import * as resourcesSelectors from './selectors'
 
 export {
   resourcesActions,

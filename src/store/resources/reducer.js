@@ -1,4 +1,4 @@
-import reduceReducers from "reduce-reducers"
+import reduceReducers from 'reduce-reducers'
 
 import {
   FETCH_RESOURCES_MAP_FAILURE,
@@ -10,7 +10,7 @@ import {
   FETCH_RESOURCE_FAILURE,
   FETCH_RESOURCE_REQUEST,
   FETCH_RESOURCE_SUCCESS
-} from "store/resources/actions"
+} from 'store/resources/actions'
 
 function resource (state, action) {
   switch (action.type) {

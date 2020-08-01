@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react"
-import { connect } from "react-redux"
-import { Container } from "@material-ui/core"
-import Header from "components/layout/Header"
-import "./App.scss"
-import { resourcesActions, resourcesSelectors } from "store/resources"
-import { errorsSelectors } from "store/common/errorsReducer"
-import { Route, Switch } from "react-router-dom"
-import ResourceList from "containers/ResourceList"
-import ResourceItem from "containers/ResourceItem"
-import Loader from "components/ui/Loader"
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Container } from '@material-ui/core'
+import Header from 'components/layout/Header'
+import './App.scss'
+import { resourcesActions, resourcesSelectors } from 'store/resources'
+import { errorsSelectors } from 'store/common/errorsReducer'
+import { Route, Switch } from 'react-router-dom'
+import ResourceList from 'containers/ResourceList'
+import ResourceItem from 'containers/ResourceItem'
+import Loader from 'components/ui/Loader'
 
 function App (props) {
   const [isLoading, setIsLoading] = useState(false)
@@ -32,7 +32,7 @@ function App (props) {
   }, [getResourcesMap])
 
   if (errors && errors.length) {
-    console.warn("ERRORS")
+    console.warn('ERRORS')
     console.error(errors)
   }
   return (

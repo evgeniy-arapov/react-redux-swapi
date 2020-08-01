@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useCallback } from "react"
-import { connect } from "react-redux"
-import ListView from "components/ListView"
-import { withRouter } from "react-router-dom"
-import { resourcesActions, resourcesSelectors } from "store/resources"
-import ListItem from "components/ListItem"
-import Pagination from "components/Pagination"
-import Search from "components/Search"
-import Typography from "@material-ui/core/Typography"
-import { capitalize } from "lodash"
-import Loader from "components/ui/Loader"
+import React, { useState, useEffect, useCallback } from 'react'
+import { connect } from 'react-redux'
+import ListView from 'components/ListView'
+import { withRouter } from 'react-router-dom'
+import { resourcesActions, resourcesSelectors } from 'store/resources'
+import ListItem from 'components/ListItem'
+import Pagination from 'components/Pagination'
+import Search from 'components/Search'
+import Typography from '@material-ui/core/Typography'
+import { capitalize } from 'lodash'
+import Loader from 'components/ui/Loader'
 
 function ResourceList ({data, history, resourcesMeta, location, getResources, ...props}) {
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState(null)
   const resourceName = props.match.params.resourceName
-  const page = new URL(window.location.href).searchParams.get("page")
+  const page = new URL(window.location.href).searchParams.get('page')
 
   const fetchResources = useCallback(async (name, params) => {
     setIsFetching(true)
@@ -29,7 +29,7 @@ function ResourceList ({data, history, resourcesMeta, location, getResources, ..
   }, [getResources]) 
 
   const updateSearch = useCallback(async (search) => {
-    history.push({search: "page=1"})
+    history.push({search: 'page=1'})
     await fetchResources(resourceName, {page: 1, search})
   }, [fetchResources, resourceName, history])
   
@@ -43,7 +43,7 @@ function ResourceList ({data, history, resourcesMeta, location, getResources, ..
   
 
   return (
-    <div className={"resource-list"}>
+    <div className={'resource-list'}>
       <Typography variant="h2" gutterBottom>
         {capitalize(resourceName)}
       </Typography>

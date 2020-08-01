@@ -1,12 +1,12 @@
-import React from "react"
-import debounce from "lodash/debounce"
-import TextField from "@material-ui/core/TextField"
-import { createMuiTheme } from "@material-ui/core/styles"
-import { ThemeProvider } from "@material-ui/styles"
+import React from 'react'
+import debounce from 'lodash/debounce'
+import TextField from '@material-ui/core/TextField'
+import { createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
 
 const theme = createMuiTheme({
   palette: {
-    type: "light"
+    type: 'light'
   }
 })
 
@@ -18,13 +18,13 @@ export default function Search ({resourceName, isSearch, searchString, updateSea
   }
 
   return (
-    <div className={"search"}>
+    <div className={'search'}>
       <ThemeProvider theme={theme}>
         <form noValidate autoComplete="off">
           <TextField
             key={resourceName}
             label="Search"
-            defaultValue={isSearch ? searchString : ""}
+            defaultValue={isSearch ? searchString : ''}
             onChange={handleChange}
             margin="normal"
             variant="outlined"

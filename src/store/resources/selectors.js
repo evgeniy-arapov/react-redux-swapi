@@ -1,4 +1,4 @@
-import getNested from "lodash/get"
+import getNested from 'lodash/get'
 
 export function getResourcesNames (state) {
   return Object.keys(state.resources.resourcesMap)

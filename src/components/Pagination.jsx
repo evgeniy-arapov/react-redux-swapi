@@ -1,22 +1,22 @@
-import React from "react"
-import "./Pagination.scss"
-import { Link } from "react-router-dom"
-import RcPagination from "rc-pagination"
-import Hidden from "@material-ui/core/Hidden"
+import React from 'react'
+import './Pagination.scss'
+import { Link } from 'react-router-dom'
+import RcPagination from 'rc-pagination'
+import Hidden from '@material-ui/core/Hidden'
 
 export default function Pagination ({meta}) {
   const itemRender = (current, type, element) => {
-    if (type === "page") {
-      return <Link to={"?page=" + current}>{current}</Link>
+    if (type === 'page') {
+      return <Link to={'?page=' + current}>{current}</Link>
     }
-    if (type === "next" && meta.page === current) {
+    if (type === 'next' && meta.page === current) {
       return element
     }
-    if (type === "prev" && current < 1) {
+    if (type === 'prev' && current < 1) {
       return element
     }
 
-    return <Link to={"?page=" + current}/>
+    return <Link to={'?page=' + current}/>
   }
     
   if (!Object.keys(meta).length) return null

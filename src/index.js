@@ -1,11 +1,11 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import { BrowserRouter } from "react-router-dom"
-import { Provider } from "react-redux"
-import store from "store"
-import "./index.scss"
-import App from "./containers/App"
-import { createMuiTheme } from "@material-ui/core/styles"
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from 'store'
+import './index.scss'
+import App from './containers/App'
+import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/styles';
 import * as serviceWorker from './serviceWorker';
 
@@ -13,12 +13,12 @@ import * as serviceWorker from './serviceWorker';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#424242"
+      main: '#424242'
     },
     secondary: {
-      main: "rgb(1255,0,0)"
+      main: 'rgb(1255,0,0)'
     },
-    type: "dark"
+    type: 'dark'
   },
   breakpoints: {
     values: {
@@ -39,7 +39,7 @@ ReactDOM.render(
     </BrowserRouter>
   </Provider>
   ,
-  document.getElementById("root")
+  document.getElementById('root')
 )
 
 

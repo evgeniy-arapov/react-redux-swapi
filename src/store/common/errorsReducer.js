@@ -2,7 +2,7 @@ import {
   FETCH_RESOURCE_FAILURE,
   FETCH_RESOURCES_BY_NAME_FAILURE,
   FETCH_RESOURCES_MAP_FAILURE
-} from "store/resources/actions"
+} from 'store/resources/actions'
 
 export default (state = [], action) => {
   switch (action.type) {

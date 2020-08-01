@@ -3,38 +3,44 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.5.0",
-    "@material-ui/icons": "^4.4.3",
-    "axios": "^0.19.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "axios": "^0.19.2",
     "eslint-plugin-react-hooks": "0.0.0-f6b8d31a7",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "material-design-icons": "^3.0.1",
-    "rc-pagination": "^1.20.8",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-redux": "^7.1.1",
-    "react-router-dom": "^5.0.1",
+    "rc-pagination": "^1.21.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
     "reduce-reducers": "^1.0.4",
-    "redux": "^4.0.4",
+    "redux": "^4.0.5",
     "redux-orm": "^0.13.3",
     "redux-thunk": "^2.3.0",
     "typeface-roboto": "0.0.75"
   },
   "homepage": "https://evgeniy-arapov.github.io/react-redux-swapi/",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "watch": "NODE_PATH=src cra-build-watch -v",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "src --ext=js,jsx",
+    "lint:fix": "src --ext=js,jsx --fix"
   },
   "eslintConfig": {
     "extends": "react-app",
     "rules": {
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn"
+      "react-hooks/exhaustive-deps": "warn",
+      "quotes": [
+        "error",
+        "single"
+      ]
     }
   },
   "browserslist": {
@@ -50,9 +56,12 @@
     ]
   },
   "devDependencies": {
-    "cra-build-watch": "^3.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "cra-build-watch": "^3.2.0",
+    "customize-cra": "^1.0.0",
     "eslint": "^5.16.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
+    "react-app-rewired": "^2.1.6",
     "react-scripts": "3.1.1"
   }
 }
