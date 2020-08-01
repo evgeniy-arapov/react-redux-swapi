@@ -22,11 +22,13 @@
     "typeface-roboto": "0.0.75"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "watch": "NODE_PATH=src cra-build-watch -v",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "lint": "eslint src --ext=js,jsx",
+    "lint:fix": "eslint src --ext=js,jsx --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,6 +46,9 @@
     ]
   },
   "devDependencies": {
-    "cra-build-watch": "^3.0.0"
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "cra-build-watch": "^3.0.0",
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.1.6"
   }
 }
